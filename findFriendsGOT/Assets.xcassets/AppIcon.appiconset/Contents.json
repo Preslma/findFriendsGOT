@@ -1,15 +1,13 @@
 {
   "images" : [
     {
-      "size" : "20x20",
       "idiom" : "iphone",
-      "filename" : "logo-20@2x.png",
+      "size" : "20x20",
       "scale" : "2x"
     },
     {
-      "size" : "20x20",
       "idiom" : "iphone",
-      "filename" : "logo-20@3x.png",
+      "size" : "20x20",
       "scale" : "3x"
     },
     {
@@ -49,9 +47,8 @@
       "scale" : "3x"
     },
     {
-      "size" : "1024x1024",
       "idiom" : "ios-marketing",
-      "filename" : "logoFull-1.png",
+      "size" : "1024x1024",
       "scale" : "1x"
     },
     {
@@ -109,9 +106,8 @@
       "subtype" : "42mm"
     },
     {
-      "size" : "1024x1024",
       "idiom" : "watch-marketing",
-      "filename" : "logoFull.png",
+      "size" : "1024x1024",
       "scale" : "1x"
     }
   ],

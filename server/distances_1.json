@@ -1,0 +1,38 @@
+[
+  {
+    "contactName": "White Walker",
+    "region": "Beyond the Wall",
+    "direction": "N",
+    "distance": 450
+  },
+  {
+    "contactName": "Daenerys Targaryen",
+    "region": "The Free Cities",
+    "direction": "E",
+    "distance": 1500
+  },
+  {
+    "contactName": "Jon Snow",
+    "region": "The North",
+    "direction": "N",
+    "distance": 150
+  },
+  {
+    "contactName": "Jaime Lannister",
+    "region": "The Crownlands",
+    "direction": "E",
+    "distance": 100
+  },
+  {
+    "contactName": "Arya Stark",
+    "region": "The North",
+    "direction": "N",
+    "distance": 150
+  },
+  {
+    "contactName": "Bran Stark",
+    "region": "The North",
+    "direction": "N",
+    "distance": 150
+  }
+]

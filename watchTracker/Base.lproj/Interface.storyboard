@@ -1,14 +1,57 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="11134" systemVersion="15F34" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="AgC-eL-Hgc">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="13196" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="AgC-eL-Hgc">
+    <device id="watch38" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11106"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="11055"/>
+        <deployment identifier="watchOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="13051"/>
     </dependencies>
     <scenes>
         <!--Interface Controller-->
         <scene sceneID="aou-V4-d1y">
             <objects>
-                <controller id="AgC-eL-Hgc" customClass="InterfaceController" customModuleProvider="target"/>
+                <controller id="AgC-eL-Hgc" customClass="InterfaceController" customModule="watchTracker" customModuleProvider="target">
+                    <items>
+                        <group width="1" alignment="left" layout="vertical" id="vOu-FL-WBA">
+                            <items>
+                                <group width="1" alignment="left" id="mvb-bb-GII">
+                                    <items>
+                                        <label alignment="left" text="Jon Snow" id="tis-5q-0Az">
+                                            <fontDescription key="font" style="UICTFontTextStyleFootnote"/>
+                                        </label>
+                                        <group width="10" height="10" alignment="left" verticalAlignment="center" backgroundImage="spinner10" id="L6g-PN-QLT"/>
+                                    </items>
+                                </group>
+                                <imageView width="1" height="85" alignment="center" verticalAlignment="center" image="John Snow" contentMode="center" id="QCa-gG-D18"/>
+                            </items>
+                        </group>
+                        <group width="1" alignment="left" layout="vertical" id="zlH-uP-UTb">
+                            <items>
+                                <label width="1" alignment="left" text="The Stormlands" id="2Jy-e4-huC">
+                                    <fontDescription key="font" style="UICTFontTextStyleFootnote"/>
+                                </label>
+                                <group width="1" alignment="left" id="L9a-pY-HWO">
+                                    <items>
+                                        <imageView width="25" height="25" alignment="left" verticalAlignment="center" image="CompassNorth" id="OG5-tT-fPU"/>
+                                        <label alignment="left" verticalAlignment="center" text="100 leagues" id="YxS-3k-oKn">
+                                            <fontDescription key="font" style="UICTFontTextStyleHeadline"/>
+                                        </label>
+                                    </items>
+                                </group>
+                            </items>
+                        </group>
+                    </items>
+                    <connections>
+                        <outlet property="locationDirectionImageView" destination="OG5-tT-fPU" id="Ckf-9L-vil"/>
+                        <outlet property="locationDistanceLabel" destination="YxS-3k-oKn" id="p1s-7c-pbn"/>
+                        <outlet property="locationRegionLabel" destination="2Jy-e4-huC" id="SrZ-qP-BOF"/>
+                        <outlet property="nameLabel" destination="tis-5q-0Az" id="3k6-SR-DUD"/>
+                        <outlet property="photoImageView" destination="QCa-gG-D18" id="dS7-0c-MmI"/>
+                        <outlet property="spinnerImageGroup" destination="L6g-PN-QLT" id="9Vj-X6-F7b"/>
+                    </connections>
+                </controller>
             </objects>
         </scene>
     </scenes>

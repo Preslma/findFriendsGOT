@@ -22,13 +22,22 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate, WCSessionDelegate, URLSe
     
     private override init() {
         super.init()
-        session = WCSession.default
+        setSession()
+    }
+    
+    private func setSession() {
+        self.session = WCSession.default
     }
     
     // MARK: - Application Lifecycle
 
     func applicationDidFinishLaunching() {
         scheduleExtensionBackgroundRefresh()
+        
+        if UserDefaults.standard.value(forKey: "JsonFileNumber") as? Int == nil {
+            UserDefaults.standard.set(0, forKey: "JsonFileNumber")
+            UserDefaults.standard.synchronize()
+        }
     }
 
     func applicationDidBecomeActive() {
@@ -64,7 +73,9 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate, WCSessionDelegate, URLSe
     
     func handleIncomingPhoneData(withData message: [String: Any]) {
         if let contactName = message["selectedContact"] as? String, let _ = KnownContactNames(rawValue: contactName)  {
-            selectedContact = Contact(name: contactName)
+            UserDefaults.standard.set(contactName, forKey: "SelectedContactName")
+            UserDefaults.standard.synchronize()
+            getContactLocation() {}
         }
     }
     
@@ -115,21 +126,37 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate, WCSessionDelegate, URLSe
     // MARK: - Data Fetch
     
     var selectedContact: Contact? {
+        guard let selectedContactName = UserDefaults.standard.value(forKey: "SelectedContactName") as? String else {
+            return nil
+        }
+        let contact = Contact(name: selectedContactName)
+        if let directionString = UserDefaults.standard.value(forKey: "CurrentContactDirection") as? String,
+            let direction = Direction(rawValue: directionString),
+            let distance = UserDefaults.standard.value(forKey: "CurrentContactDistance") as? Int,
+            let region = UserDefaults.standard.value(forKey: "CurrentContactRegion") as? String {
+            contact.location = Location(direction: direction, distance: distance, region: region)
+        }
+        return contact
+    }
+    var fileNum = 0 {
         didSet {
-            getContactLocation() {}
+            UserDefaults.standard.set(fileNum, forKey: "JsonFileNumber")
+            UserDefaults.standard.synchronize()
         }
     }
-    var fileNum = 1
     
     func getContactLocation(completion: @escaping () -> Void) {
         
+        // To simulate dynamic server response, just cycle through /distances1.json through /distances9.json static text files
+        var fileNum = UserDefaults.standard.value(forKey: "JsonFileNumber") as? Int ?? self.fileNum
         if fileNum < 9 {
             fileNum += 1
         } else {
             fileNum = 1
         }
+        self.fileNum = fileNum
         
-        let serviceUrl = "\(Constants.LocationServiceURL)distances\(fileNum).json"
+        let serviceUrl = "\(Constants.LocationServiceURL)distances_\(fileNum).json"
         print("\(serviceUrl) (\(WKExtension.shared().applicationState == .background ? "background" : WKExtension.shared().applicationState == .active ? "active" : "inactive"))")
         
         if WKExtension.shared().applicationState == .background {
@@ -160,14 +187,21 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate, WCSessionDelegate, URLSe
     }
     
     func parseLocationData(data: Data) {
+        
+        guard let selectedContact = selectedContact else {
+            return
+        }
+        
         if let contactLocations = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [[String: AnyObject]],
-            let matchingContactLocation = contactLocations?.filter( { $0["contactName"] as? String == selectedContact?.name } ).first,
+            let matchingContactLocation = contactLocations?.filter( { $0["contactName"] as? String == selectedContact.name } ).first,
             let locationDistance = matchingContactLocation["distance"] as? Int,
             let locationDirection = matchingContactLocation["direction"] as? String,
-            let direction = Direction(rawValue: locationDirection) {
-            let locationRegion = matchingContactLocation["region"] as? String
+            let locationRegion = matchingContactLocation["region"] as? String {
             
-            selectedContact?.location = Location(direction: direction, distance: locationDistance, region: locationRegion)
+            UserDefaults.standard.set(locationDirection, forKey: "CurrentContactDirection")
+            UserDefaults.standard.set(locationDistance, forKey: "CurrentContactDistance")
+            UserDefaults.standard.set(locationRegion, forKey: "CurrentContactRegion")
+            UserDefaults.standard.synchronize()
             
             updateComplicationTimeline()
             updateWatchAppUI()
@@ -179,7 +213,7 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate, WCSessionDelegate, URLSe
     // MARK: UI Updates
     
     func updateWatchAppUI() {
-        //TODO
+        (WKExtension.shared().visibleInterfaceController as? InterfaceController)?.updateUI()
     }
     
     func updateComplicationTimeline() {

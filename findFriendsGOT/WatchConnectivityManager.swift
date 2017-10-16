@@ -13,14 +13,6 @@ class WatchConnectivityManager: NSObject, WCSessionDelegate {
     
     static let sharedInstance = WatchConnectivityManager()
     
-    var selectedContact: Contact? {
-        didSet {
-            if let selectedContact = selectedContact {
-                sendImmediateMessageToWatch(withData: ["selectedContact": selectedContact.name])
-            }
-        }
-    }
-    
     private var session: WCSession? {
         didSet {
             if let session = session {
@@ -33,7 +25,19 @@ class WatchConnectivityManager: NSObject, WCSessionDelegate {
     private override init() {
         super.init()
         if WCSession.isSupported() {
-            self.session = WCSession.default
+            setSession()
+        }
+    }
+    
+    private func setSession() {
+        self.session = WCSession.default
+    }
+    
+    var selectedContact: Contact? {
+        didSet {
+            if let selectedContact = selectedContact {
+                sendImmediateMessageToWatch(withData: ["selectedContact": selectedContact.name])
+            }
         }
     }
     
@@ -49,7 +53,9 @@ class WatchConnectivityManager: NSObject, WCSessionDelegate {
     
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
         if activationState == .activated && session.isPaired && session.isWatchAppInstalled {
-            sendImmediateMessageToWatch(withData: ["selectedContact": selectedContact?.name ?? ""])
+            if let selectedContact = selectedContact {
+                sendImmediateMessageToWatch(withData: ["selectedContact": selectedContact.name])
+            }
         }
     }
     

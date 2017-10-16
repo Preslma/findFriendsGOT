@@ -9,27 +9,9 @@
 import Foundation
 import UIKit
 
-struct Contact {
-    var name: String {
-        didSet {
-            switch name {
-            case KnownContactNames.WhiteWalker.rawValue:
-                photo = #imageLiteral(resourceName: "White Walker")
-            case KnownContactNames.Daenerys.rawValue:
-                photo = #imageLiteral(resourceName: "Daenerys")
-            case KnownContactNames.Jaime.rawValue:
-                photo = #imageLiteral(resourceName: "Jaime")
-            case KnownContactNames.JonSnow.rawValue:
-                photo = #imageLiteral(resourceName: "John Snow")
-            case KnownContactNames.AryaStark.rawValue:
-                photo = #imageLiteral(resourceName: "Arya")
-            case KnownContactNames.BranStark.rawValue:
-                photo = #imageLiteral(resourceName: "Bran")
-            default:
-                return
-            }
-        }
-    }
+class Contact {
+    var name: String
+    var shortName: String?
     var description: String?
     var photo: UIImage?
     var location: Location?
@@ -37,10 +19,52 @@ struct Contact {
     init(name: String, description: String?) {
         self.name = name
         self.description = description
+        setPhoto()
+        setShortName()
+    }
+    
+    func setPhoto() {
+        switch name {
+        case KnownContactNames.WhiteWalker.rawValue:
+            photo = #imageLiteral(resourceName: "White Walker")
+        case KnownContactNames.Daenerys.rawValue:
+            photo = #imageLiteral(resourceName: "Daenerys")
+        case KnownContactNames.Jaime.rawValue:
+            photo = #imageLiteral(resourceName: "Jaime")
+        case KnownContactNames.JonSnow.rawValue:
+            photo = #imageLiteral(resourceName: "John Snow")
+        case KnownContactNames.AryaStark.rawValue:
+            photo = #imageLiteral(resourceName: "Arya")
+        case KnownContactNames.BranStark.rawValue:
+            photo = #imageLiteral(resourceName: "Bran")
+        default:
+            return
+        }
+    }
+    
+    func setShortName() {
+        switch name {
+        case KnownContactNames.WhiteWalker.rawValue:
+            shortName = "Wight"
+        case KnownContactNames.Daenerys.rawValue:
+            shortName = "Daenerys"
+        case KnownContactNames.Jaime.rawValue:
+            shortName = "Jaime"
+        case KnownContactNames.JonSnow.rawValue:
+            shortName = "Jon"
+        case KnownContactNames.AryaStark.rawValue:
+            shortName = "Aryna"
+        case KnownContactNames.BranStark.rawValue:
+            shortName = "Bran"
+        default:
+            return
+        }
     }
     
     init(name: String) {
         self.name = name
+        setPhoto()
+        setShortName()
     }
 }
 

@@ -21,7 +21,7 @@
                                         <label alignment="left" text="Jon Snow" id="tis-5q-0Az">
                                             <fontDescription key="font" style="UICTFontTextStyleFootnote"/>
                                         </label>
-                                        <group width="10" height="10" alignment="left" verticalAlignment="center" backgroundImage="spinner10" id="L6g-PN-QLT"/>
+                                        <group width="10" height="10" alignment="left" verticalAlignment="center" hidden="YES" backgroundImage="spinner10" id="L6g-PN-QLT"/>
                                     </items>
                                 </group>
                                 <imageView width="1" height="85" alignment="center" verticalAlignment="center" image="John Snow" contentMode="center" id="QCa-gG-D18"/>

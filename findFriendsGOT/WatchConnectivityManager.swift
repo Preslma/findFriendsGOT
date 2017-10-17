@@ -24,6 +24,7 @@ class WatchConnectivityManager: NSObject, WCSessionDelegate {
     
     private override init() {
         super.init()
+        // Make sure this device is an an iPhone which can pair with an Apple Watch
         if WCSession.isSupported() {
             setSession()
         }

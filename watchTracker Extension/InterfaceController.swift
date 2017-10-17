@@ -19,23 +19,24 @@ class InterfaceController: WKInterfaceController {
     @IBOutlet var locationDistanceLabel: WKInterfaceLabel!
     @IBOutlet var spinnerImageGroup: WKInterfaceGroup!
     
+    var justAwoke = false
+    
     override func awake(withContext context: Any?) {
         super.awake(withContext: context)        
         // Configure interface objects here.
+        justAwoke = true
+        updateModel()
     }
     
     override func willActivate() {
         // This method is called when watch view controller is about to be visible to user
         super.willActivate()
         
-        if WKExtension.shared().applicationState == .active {
-            spinnerImageGroup.setHidden(false)
-            spinnerImageGroup.setBackgroundImageNamed("spinner")
-            spinnerImageGroup.startAnimatingWithImages(in: NSMakeRange(1,42), duration: 1.5, repeatCount: 0)
-            (WKExtension.shared().delegate as? ExtensionDelegate)?.getContactLocation {
-                self.spinnerImageGroup.stopAnimating()
-                self.spinnerImageGroup.setHidden(true)
-            }
+        if dataUpdatedRecently() || justAwoke {
+            updateUI()
+            if justAwoke { justAwoke = false }
+        } else {
+            updateModel()
         }
     }
 
@@ -68,5 +69,30 @@ class InterfaceController: WKInterfaceController {
         } else {
             locationDirectionImageView.setImage(nil)
         }
+    }
+    
+    func updateModel() {
+        if WKExtension.shared().applicationState == .active {
+            startSpinner()
+            (WKExtension.shared().delegate as? ExtensionDelegate)?.getContactLocation {
+                self.stopSpinner()
+                // Model update calls updateUI(), so I don't need to do it here
+            }
+        }
+    }
+    
+    func dataUpdatedRecently() -> Bool {
+        return false // can implement caching of some sort if desired
+    }
+    
+    private func startSpinner() {
+        spinnerImageGroup.setHidden(false)
+        spinnerImageGroup.setBackgroundImageNamed("spinner")
+        spinnerImageGroup.startAnimatingWithImages(in: NSMakeRange(1,42), duration: 1.5, repeatCount: 0)
+    }
+    
+    private func stopSpinner() {
+        self.spinnerImageGroup.stopAnimating()
+        self.spinnerImageGroup.setHidden(true)
     }
 }
